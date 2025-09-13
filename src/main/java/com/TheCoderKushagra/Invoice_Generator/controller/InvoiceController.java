@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/invoice")
 @CrossOrigin("*")
@@ -15,8 +17,14 @@ public class InvoiceController {
     private InvoiceService invoiceService;
 
     @PostMapping("/saveInvoice")
-    public ResponseEntity<Invoice> saveInvoice (@RequestBody Invoice invoice){
+    public ResponseEntity<Invoice> callSaveInvoice (@RequestBody Invoice invoice){
         Invoice invoices = invoiceService.saveInvoice(invoice);
+        return new ResponseEntity<>(invoices, HttpStatus.OK);
+    }
+
+    @GetMapping("/seeInvoices")
+    public ResponseEntity<List<Invoice>> callFetchInvoice (){
+        List<Invoice> invoices = invoiceService.fetchAll();
         return new ResponseEntity<>(invoices, HttpStatus.OK);
     }
 
