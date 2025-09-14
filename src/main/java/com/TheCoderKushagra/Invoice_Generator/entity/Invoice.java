@@ -35,7 +35,7 @@ public class Invoice {
     @LastModifiedBy
     private Instant lastUpdatedAt;
 
-    private String thumbnailUri;
+    private String thumbnailUrl;
     private String template;
     private String title;
 }

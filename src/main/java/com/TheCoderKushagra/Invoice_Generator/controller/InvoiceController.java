@@ -17,15 +17,20 @@ public class InvoiceController {
     private InvoiceService invoiceService;
 
     @PostMapping("/saveInvoice")
-    public ResponseEntity<Invoice> callSaveInvoice (@RequestBody Invoice invoice){
+    public ResponseEntity<Invoice> callSaveInvoice( @RequestBody Invoice invoice ) {
         Invoice invoices = invoiceService.saveInvoice(invoice);
         return new ResponseEntity<>(invoices, HttpStatus.OK);
     }
 
     @GetMapping("/seeInvoices")
-    public ResponseEntity<List<Invoice>> callFetchInvoice (){
+    public ResponseEntity<List<Invoice>> callFetchInvoice() {
         List<Invoice> invoices = invoiceService.fetchAll();
         return new ResponseEntity<>(invoices, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{invoiceId}")
+    public ResponseEntity<?> callDeleteInvoice( @PathVariable String invoiceId ) {
+        invoiceService.deleteInvoice(invoiceId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

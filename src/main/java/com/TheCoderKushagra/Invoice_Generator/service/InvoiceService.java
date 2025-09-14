@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class InvoiceService {
@@ -16,7 +17,13 @@ public class InvoiceService {
         return invoiceRepository.save(invoice);
     }
 
-    public List<Invoice> fetchAll(){
+    public List<Invoice> fetchAll() {
         return invoiceRepository.findAll();
+    }
+    
+    public void deleteInvoice( String invoiceId ) {
+        Invoice existingInvoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(() -> new RuntimeException("Invoice not Found!!"));
+        invoiceRepository.delete(existingInvoice);
     }
 }
