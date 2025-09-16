@@ -26,6 +26,7 @@ public class Invoice {
     private Shipping shipping;
     private InvoiceDetail invoice;
     private List<Item> items;
+
     private String notes;
     private String logo;
     private double tax;
@@ -38,4 +39,56 @@ public class Invoice {
     private String thumbnailUrl;
     private String template;
     private String title;
+
+    // Required classes
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Company {
+        private String name;
+        private String phone;
+        private String address;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Billing {
+        private String name;
+        private String phone;
+        private String address;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Shipping {
+        private String name;
+        private String phone;
+        private String address;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class InvoiceDetail {
+        private String number;
+        private String data;
+        private String dueDate;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Item {
+        private String name;
+        private int qty;
+        private double amount;
+        private String description;
+    }
 }
