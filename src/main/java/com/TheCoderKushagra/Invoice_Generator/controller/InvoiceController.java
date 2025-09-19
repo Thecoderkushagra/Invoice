@@ -6,6 +6,8 @@ import com.TheCoderKushagra.Invoice_Generator.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,7 +16,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/invoice")
-@CrossOrigin("*")
 public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;
@@ -22,26 +23,37 @@ public class InvoiceController {
     private EmailService emailService;
 
     @PostMapping("/saveInvoice")
-    public ResponseEntity<Invoice> callSaveInvoice( @RequestBody Invoice invoice ) {
-        Invoice invoices = invoiceService.saveInvoice(invoice);
-        return new ResponseEntity<>(invoices, HttpStatus.OK);
+    public ResponseEntity<String> callSaveInvoice( @RequestBody Invoice invoice ) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        invoiceService.saveInvoice(invoice, username);
+        return new ResponseEntity<>("Invoice Saved Successfully",HttpStatus.OK);
     }
 
     @GetMapping("/seeInvoices")
     public ResponseEntity<List<Invoice>> callFetchInvoice() {
-        List<Invoice> invoices = invoiceService.fetchAll();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        List<Invoice> invoices = invoiceService.fetchAll(username);
         return new ResponseEntity<>(invoices, HttpStatus.OK);
     }
 
     @DeleteMapping("/{invoiceId}")
-    public ResponseEntity<?> callDeleteInvoice( @PathVariable String invoiceId ) {
-        invoiceService.deleteInvoice(invoiceId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<String> callDeleteInvoice( @PathVariable String invoiceId ) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        boolean b = invoiceService.deleteInvoice(invoiceId, username);
+        if (b) {
+            return new ResponseEntity<>("Invoice Deleted", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Invalid Invoice ID", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/sendPdf")
     public ResponseEntity<String> sendPFf( @RequestParam("pdfFile") MultipartFile pdfFile,
                                            @RequestParam("recipientEmail") String recipientEmail ) {
+        SecurityContextHolder.getContext().getAuthentication();
         if (recipientEmail == null || recipientEmail.trim().isEmpty()) {
             return new ResponseEntity<>("Email address is required", HttpStatus.BAD_REQUEST);
         }

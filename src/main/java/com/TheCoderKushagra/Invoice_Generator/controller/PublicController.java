@@ -22,6 +22,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/public")
+@CrossOrigin("*")
 public class PublicController {
     @Autowired
     private UserService userService;
@@ -100,6 +101,7 @@ public class PublicController {
             response.put("token", jwt);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
+            log.error("error",e);
             return new ResponseEntity<>("Unable to SngIn: Incorrect Username or Password", HttpStatus.BAD_REQUEST);
         }
     }

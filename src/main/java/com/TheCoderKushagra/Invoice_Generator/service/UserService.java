@@ -26,6 +26,10 @@ public class UserService {
         return userRepository.findByUserName(user);
     }
 
+    public void deleteByUserName(String user) {
+        userRepository.deleteByUserName(user);
+    }
+
     // Otp Generator
     public String generateSixDigitNumber() {
         String uuidDigitsOnly = UUID.randomUUID().toString().replaceAll("[^0-9]", "");
